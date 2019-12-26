@@ -23,7 +23,8 @@ func main() {
 }
 
 func startup() {
-	action := "./build build docker deploy"
+	//action := "./build build docker deploy"
+	action := "./build.ps1 build docker deploy"
 	log.Println(fileHash)
 	// this should be parameterized, detected and injected TODO
 	log.Println("creating whitelist")
@@ -33,7 +34,7 @@ func startup() {
 	buildRegistry()
 	// I probably need to think about this goroutine a bit
 	// k8s is a bit heavy for every file change
-	go doEvery(15*time.Second, verifyhashes, action)
+	go doEvery(30*time.Second, verifyhashes, action)
 	for {
 	}
 
@@ -41,7 +42,7 @@ func startup() {
 
 func runAction(action string) {
 	log.Println("Taking action, running: " + action)
-	cmd := exec.Command("/bin/sh", "-c", action)
+	cmd := exec.Command("pwsh", "-c", action)
 	var outb, errb bytes.Buffer
 	cmd.Stdout = &outb
 	cmd.Stderr = &errb
